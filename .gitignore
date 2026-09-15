@@ -1,0 +1,9 @@
+# Local Xcode state
+**/xcuserdata/
+
+# Build products
+build/
+DerivedData/
+
+# Local-only API key overrides
+Netflix/Utilities/Secrets.local.swift
