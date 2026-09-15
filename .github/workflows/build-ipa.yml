@@ -1,4 +1,4 @@
-name: Build iOS IPA
+name: Build RepliFlix iOS IPA
 
 on:
   workflow_dispatch:
@@ -9,9 +9,9 @@ permissions:
   contents: read
 
 env:
-  SCHEME: Netflix
-  PROJECT: Netflix.xcodeproj
-  ARCHIVE_PATH: build/Netflix.xcarchive
+  SCHEME: RepliFlix
+  PROJECT: RepliFlix.xcodeproj
+  ARCHIVE_PATH: build/RepliFlix.xcarchive
 
 jobs:
   build:
@@ -51,21 +51,21 @@ jobs:
       - name: Package IPA
         run: |
           set -euo pipefail
-          APP_PATH="$ARCHIVE_PATH/Products/Applications/Netflix.app"
+          APP_PATH="$ARCHIVE_PATH/Products/Applications/RepliFlix.app"
           test -d "$APP_PATH"
           mkdir -p build/Payload
           cp -R "$APP_PATH" build/Payload/
-          (cd build && zip -qry Netflix-unsigned.ipa Payload)
-          shasum -a 256 build/Netflix-unsigned.ipa | tee build/Netflix-unsigned.ipa.sha256
+          (cd build && zip -qry RepliFlix-unsigned.ipa Payload)
+          shasum -a 256 build/RepliFlix-unsigned.ipa | tee build/RepliFlix-unsigned.ipa.sha256
 
       - name: Upload IPA and archive
         uses: actions/upload-artifact@v4
         with:
-          name: Netflix-iOS-build
+          name: RepliFlix-iOS-build
           path: |
-            build/Netflix-unsigned.ipa
-            build/Netflix-unsigned.ipa.sha256
-            build/Netflix.xcarchive
+            build/RepliFlix-unsigned.ipa
+            build/RepliFlix-unsigned.ipa.sha256
+            build/RepliFlix.xcarchive
             build.log
           if-no-files-found: error
           retention-days: 14

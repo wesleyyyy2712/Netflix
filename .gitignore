@@ -6,4 +6,4 @@ build/
 DerivedData/
 
 # Local-only API key overrides
-Netflix/Utilities/Secrets.local.swift
+RepliFlix/Secrets.local.swift
