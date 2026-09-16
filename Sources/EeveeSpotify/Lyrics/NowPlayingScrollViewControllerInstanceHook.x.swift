@@ -2,16 +2,12 @@ import Orion
 import UIKit
 
 var statefulPlayer: StatefulPlayerImplementation?
-var backgroundViewModel: SPTNowPlayingBackgroundViewModel?
-var scrollDataSource: NowPlayingScrollDataSourceImplementation?
 
-var nowPlayingScrollViewController: NowPlayingScrollViewController?
-var npvScrollViewController: NPVScrollViewController?
-
+/// Hooks only the player-provider methods needed to observe the configured trigger track.
 class LegacyNowPlayingPlatformSwiftServiceImplementationHook: ClassHook<NSObject> {
-    typealias Group = IOS14PremiumPatchingGroup
+    typealias Group = TriggerPanelHookGroup
     static let targetName = "NowPlaying_PlatformImpl.NowPlayingPlatformSwiftServiceImplementation"
-    
+
     func provideStatefulPlayer() -> StatefulPlayerImplementation {
         statefulPlayer = orig.provideStatefulPlayer()
         if let statefulPlayer {
@@ -22,43 +18,14 @@ class LegacyNowPlayingPlatformSwiftServiceImplementationHook: ClassHook<NSObject
 }
 
 class NowPlayingPlatformSwiftServiceImplementationHook: ClassHook<NSObject> {
-    typealias Group = NonIOS14PremiumPatchingGroup
+    typealias Group = TriggerPanelHookGroup
     static let targetName = "NowPlaying_PlatformImpl.NowPlayingPlatformSwiftServiceImplementation"
-    
+
     func provideStatefulPlayerWithFeatureIdentifier(_ identifier: NSString) -> StatefulPlayerImplementation {
         statefulPlayer = orig.provideStatefulPlayerWithFeatureIdentifier(identifier)
         if let statefulPlayer {
             TriggerTrackDetector.shared.attach(to: statefulPlayer)
         }
         return statefulPlayer!
-    }
-}
-
-class NowPlayingScrollPrivateServiceImplementationHook: ClassHook<NSObject> {
-    typealias Group = BaseLyricsGroup
-    static let targetName = "NowPlaying_ScrollImpl.NowPlayingScrollPrivateServiceImplementation"
-    
-    func provideScrollViewControllerWithDependencies(_ dependencies: NSObject) -> UIViewController {
-        let scrollViewController = orig.provideScrollViewControllerWithDependencies(dependencies)
-        
-        if NSStringFromClass(type(of: scrollViewController)) ~= "NowPlayingScrollViewController" {
-            nowPlayingScrollViewController = Dynamic.convert(
-                scrollViewController,
-                to: NowPlayingScrollViewController.self
-            )
-        }
-        else {
-            scrollDataSource = Ivars<NowPlayingScrollDataSourceImplementation>(target)
-                .$__lazy_storage_$_scrollDataSource
-            npvScrollViewController = Dynamic.convert(
-                scrollViewController,
-                to: NPVScrollViewController.self
-            )
-        }
-        
-        backgroundViewModel = Ivars<SPTNowPlayingBackgroundViewModel>(dependencies)
-            .backgroundViewModel
-        
-        return scrollViewController
     }
 }
