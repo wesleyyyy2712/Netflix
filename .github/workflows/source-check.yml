@@ -1,0 +1,23 @@
+name: Source checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify hosted integration files
+        run: |
+          test -f Sources/EeveeSpotify/TriggerConfiguration.swift
+          test -f Sources/EeveeSpotify/TriggerTrackDetector.swift
+          test -f Sources/EeveeSpotify/TriggerPanelHost.swift
+          test -f Sources/EeveeSpotify/PanelAppState.swift
+          test -f HOSTED_PANEL_INTEGRATION.md
+          grep -q '0wwPcA6wtMf6HUMpIRdeP7' Sources/EeveeSpotify/TriggerConfiguration.swift
+          grep -q 'HostedPanelContext.isHostedInSpotify' Sources/EeveeSpotify/PanelAppState.swift
+          echo 'Hosted integration source checks passed.'

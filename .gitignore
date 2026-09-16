@@ -1,9 +1,14 @@
-# Local Xcode state
-**/xcuserdata/
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
+xcuserdata/
 
-# Build products
-build/
-DerivedData/
-
-# Local-only API key overrides
-RepliFlix/Secrets.local.swift
+._*
+.theos
+.swiftpm
+/packages
+.theos/
+packages/
+.DS_Store
+.vscode/
