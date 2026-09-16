@@ -1,8 +1,8 @@
 Package: com.eevee.spotify
-Name: EeveeSpotify
-Version: 6.2.2
+Name: EeveeSpotify Hosted Panel
+Version: 6.2.2-hosted
 Architecture: iphoneos-arm
-Description: A tweak to get Spotify Premium for free, just like Spotilife
+Description: Hosted SwiftUI panel opened by a configured Spotify track trigger
 Maintainer: Eevee
 Author: Eevee
 Section: Tweaks
